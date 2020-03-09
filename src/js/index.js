@@ -14,6 +14,8 @@ const state = {}
 
 window.state = state
 
+
+
 const controlSearch = async () => {
     const categoryId = parseInt(elements.selectCategory.value);
     const cityValue = elements.searchInput.value;
@@ -43,6 +45,30 @@ const controlSearch = async () => {
     
         //console.log(state.search.restaurent[0].restaurant.location.city_id+ " my id")  
 }
+
+(async () => {
+    const categoryId = parseInt(elements.selectCategory.value);
+    //1 get query from view
+    const query = searchView.getInput()
+
+    //2 new search object and add to state
+    state.search = new Search()
+    clearLoader();
+
+    //3 prepare UI for result
+    //searchView.clearresult();
+    renderLoader(elements.resultDiv);
+
+    //4 search for recipies
+    await state.search.getResults(query, categoryId);
+
+    //5 render result on UI
+    document.querySelector('.loader').remove();
+    searchView.renderResults(state.search.restaurent)
+    document.querySelector('.results__list li:first-child a').click()
+    
+    
+})();
 
 elements.searchForm.addEventListener('submit', e => {
     e.preventDefault();
